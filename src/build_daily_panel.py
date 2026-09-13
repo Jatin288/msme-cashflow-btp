@@ -36,7 +36,7 @@ def main():
     # Parse date columns
     df["posting_date"] = pd.to_datetime(df["posting_date"])
     df["clear_date"] = pd.to_datetime(df["clear_date"])
-    df["due_in_date"] = pd.to_datetime(df["due_in_date"])
+    df["due_in_date"] = pd.to_datetime(df["due_in_date"].astype(str), format="%Y%m%d")
 
     # ── Step 3: Filter to U001 ──
     u001 = df[df["business_code"] == "U001"].copy()

@@ -1,0 +1,34 @@
+{
+  "invoice_amount": {
+    "distribution": "lognormal",
+    "mu": 9.349634347209616,
+    "sigma": 1.7919555209628613
+  },
+  "daily_invoice_count": {
+    "distribution": "poisson",
+    "lambda": 85.15294117647059
+  },
+  "payment_delay": {
+    "proportions": {
+      "early": 0.3885603757944183,
+      "on_time": 0.22481348438795248,
+      "late": 0.38662613981762917
+    },
+    "early_magnitude": {
+      "distribution": "gamma",
+      "shape": 1.4687943731033872,
+      "scale": 3.4593470959477
+    },
+    "late_magnitude": {
+      "distribution": "gamma",
+      "shape": 0.76857730397216,
+      "scale": 7.462013687956359
+    }
+  },
+  "customer_personality": {
+    "n_customers_fitted": 243,
+    "personality_mu": 0.957527744536851,
+    "personality_sigma": 5.507548342424382,
+    "within_customer_std": 6.213242403237864
+  }
+}
