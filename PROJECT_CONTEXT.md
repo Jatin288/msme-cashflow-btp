@@ -1,6 +1,6 @@
 # MSME Cash-Flow BTP — Complete Project Context
 
-> **Last updated:** September 5, 2026  
+> **Last updated:** September 13, 2026  
 > **Purpose:** Single source of truth synthesized from the full conversation history. Read this before every session.
 
 ---
@@ -82,9 +82,9 @@ For when Prof. Vajpayee asks about technical depth:
 | Phase | Weeks | Work | Status |
 |---|---|---|---|
 | Literature + problem formulation | 1–2 | 8 papers read, synthesis, problem formulation doc written | DONE |
-| Data pipeline | 3–5 | Daily cash-flow panel from raw invoices, feature engineering | NEXT |
-| Synthetic data + KS validation | 6–8 | Calibrated generator, two-part model, validation | Pending |
-| Forecasting models (baselines to XGBoost) | 9–12 | Naive, ARIMA, XGBoost/LightGBM, walk-forward eval | Pending |
+| Data pipeline | 3–5 | Daily cash-flow panel from raw invoices, feature engineering | DONE |
+| Synthetic data + KS validation | 6–8 | Calibrated generator, two-part model, validation | DONE (early) |
+| **Forecasting models (baselines to XGBoost)** | **9–12** | **Naive, ARIMA, XGBoost/LightGBM, walk-forward eval** | **NEXT** |
 | Integration, evaluation, report | 13–16 | End-to-end demo (CSV upload), MAE/RMSE results | Pending |
 | Buffer + submission | 17–18 | Exam period, final commit | Pending |
 
@@ -207,7 +207,7 @@ Based on published literature:
 
 ---
 
-## 11. Current Project State (as of Sept 5, 2026)
+## 11. Current Project State (as of Sept 13, 2026)
 
 ### DONE — Week 1
 
@@ -227,17 +227,28 @@ Based on published literature:
 - Weekly update email drafted (findings inline; no attachment; customer-personality hook added)
 - Everything committed and pushed to GitHub
 
-### NEXT — Week 3
+### DONE — Week 3
 
-Goal: Build the daily cash-flow panel — the core data structure every downstream model reads from.
+- Built `src/build_daily_panel.py` — cleans SAP dataset, builds daily cash-flow panel for U001
+- Panel: 510 rows × 17 columns (revenue_booked, cash_collected, receivables_outstanding, 13 rolling features)
+- All features backward-looking (no data leakage)
+- Reconciliation verified: ₹0.00 difference between total revenue and total collections
+- Added README.md to GitHub repo
+- Weekly email sent to Prof. Vajpayee (with GitHub link)
+- Bug found and fixed: `due_in_date` stored as integer (YYYYMMDD), not date string
 
-One row per business per day:
-`business_id | date | revenue | expenses | receivables_outstanding | payables_due | inventory_spend | cash_balance`
+### DONE — Week 4
 
-Steps:
-1. Clean SAP dataset properly (drop `area_business`, filter USD, handle open invoices, parse date columns)
-2. Aggregate transaction records into the daily panel format
-3. Compute rolling features (no leakage — all features must use only past information relative to prediction date)
+- Built `src/fit_real_distributions.py` — fits lognormal (amounts), Poisson (counts), gamma (delays), customer personalities from real data
+- Built `src/generate_synthetic_data.py` — simulates 20 MSME businesses × 365 days with complete cash flow (inflows + outflows + cash balance)
+- 12/20 synthetic businesses experience liquidity stress events (cash balance < 0)
+- Built `src/validate_synthetic.py` — KS-test validation comparing synthetic vs real distributions
+- Validation results: invoice amounts and payment delays well-calibrated (KS < 0.15); daily revenue differences explained by MSME scale vs large business (structural, not error)
+- Key design decisions: two-part payment model with gamma magnitudes, per-customer payment personalities, COGS 55-75%, initial buffer 7-30 days
+
+### NEXT — Week 5+
+
+Forecasting models: Naive baselines, ARIMA, XGBoost/LightGBM with walk-forward validation
 
 ---
 
@@ -250,9 +261,17 @@ Steps:
 | `data_notes_week2.md` | `reports/` | EDA findings from both datasets |
 | `01_eda_ibm_dataset.ipynb` | `notebooks/` | EDA notebook for IBM + SAP datasets |
 | `PROJECT_CONTEXT.md` | root | This file — full project memory |
-| `.gitignore` | root | Ignores `venv/` and `data/raw/` |
+| `README.md` | root | Project overview for GitHub |
+| `.gitignore` | root | Ignores `venv/`, `data/raw/`, `conversation_context.md` |
 | `WA_Fn-UseC_-Accounts-Receivable.csv` | `data/raw/` | IBM dataset (2,466 rows) |
 | `dataset.csv` | `data/raw/` | SAP-style dataset (50,000 rows) |
+| `build_daily_panel.py` | `src/` | Week 3: cleans SAP data, builds daily panel with rolling features |
+| `fit_real_distributions.py` | `src/` | Week 4: fits lognormal, Poisson, gamma to real data |
+| `generate_synthetic_data.py` | `src/` | Week 4: simulates 20 MSME businesses with full cash flow |
+| `validate_synthetic.py` | `src/` | Week 4: KS-test validation report |
+| `daily_panel_u001.csv` | `data/processed/` | Real daily panel (510 rows × 17 cols) |
+| `fitted_params.json` | `data/processed/` | Fitted distribution parameters |
+| `synthetic_panels.csv` | `data/processed/` | Synthetic panels (7,300 rows × 21 cols) |
 
 ---
 
