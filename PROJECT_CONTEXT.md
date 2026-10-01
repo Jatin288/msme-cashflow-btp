@@ -1,6 +1,6 @@
 # MSME Cash-Flow BTP — Complete Project Context
 
-> **Last updated:** September 13, 2026  
+> **Last updated:** October 1, 2026  
 > **Purpose:** Single source of truth synthesized from the full conversation history. Read this before every session.
 
 ---
@@ -84,7 +84,8 @@ For when Prof. Vajpayee asks about technical depth:
 | Literature + problem formulation | 1–2 | 8 papers read, synthesis, problem formulation doc written | DONE |
 | Data pipeline | 3–5 | Daily cash-flow panel from raw invoices, feature engineering | DONE |
 | Synthetic data + KS validation | 6–8 | Calibrated generator, two-part model, validation | DONE (early) |
-| **Forecasting models (baselines to XGBoost)** | **9–12** | **Naive, ARIMA, XGBoost/LightGBM, walk-forward eval** | **NEXT** |
+| Walk-forward validation + baselines | 5 | 4 baselines, expanding-window eval, MAE/RMSE/sMAPE | DONE |
+| **Forecasting models (ARIMA to XGBoost)** | **6–8** | **ARIMA, XGBoost/LightGBM, stress classification** | **NEXT** |
 | Integration, evaluation, report | 13–16 | End-to-end demo (CSV upload), MAE/RMSE results | Pending |
 | Buffer + submission | 17–18 | Exam period, final commit | Pending |
 
@@ -246,9 +247,18 @@ Based on published literature:
 - Validation results: invoice amounts and payment delays well-calibrated (KS < 0.15); daily revenue differences explained by MSME scale vs large business (structural, not error)
 - Key design decisions: two-part payment model with gamma magnitudes, per-customer payment personalities, COGS 55-75%, initial buffer 7-30 days
 
-### NEXT — Week 5+
+### DONE — Week 5
 
-Forecasting models: Naive baselines, ARIMA, XGBoost/LightGBM with walk-forward validation
+- Built `src/walk_forward.py` — expanding-window walk-forward validation engine
+- Built `src/models/baselines.py` — 4 baseline forecasters (Last Value, 7-Day Avg, 30-Day Avg, Linear Trend)
+- Evaluated across 4 horizons (t+7, t+14, t+30, t+60) on all 20 synthetic businesses
+- 11,440 total predictions; results saved to `reports/baseline_results.csv` and `reports/model_comparison.md`
+- Key findings: 7-Day Avg and Last Value closely competitive (MAE ~₹3.5M at t+7); Linear Trend worst; all baselines sMAPE 37–74%
+- Framework designed for plug-in models — ARIMA/XGBoost will use the same evaluation engine
+
+### NEXT — Week 6+
+
+ARIMA / Auto-ARIMA, then XGBoost/LightGBM with the same walk-forward framework
 
 ---
 
@@ -269,9 +279,13 @@ Forecasting models: Naive baselines, ARIMA, XGBoost/LightGBM with walk-forward v
 | `fit_real_distributions.py` | `src/` | Week 4: fits lognormal, Poisson, gamma to real data |
 | `generate_synthetic_data.py` | `src/` | Week 4: simulates 20 MSME businesses with full cash flow |
 | `validate_synthetic.py` | `src/` | Week 4: KS-test validation report |
+| `walk_forward.py` | `src/` | Week 5: Walk-forward validation engine |
+| `models/baselines.py` | `src/models/` | Week 5: 4 baseline forecasters |
 | `daily_panel_u001.csv` | `data/processed/` | Real daily panel (510 rows × 17 cols) |
 | `fitted_params.json` | `data/processed/` | Fitted distribution parameters |
-| `synthetic_panels.csv` | `data/processed/` | Synthetic panels (7,300 rows × 21 cols) |
+| `synthetic_panels.csv` | `data/processed/` | Synthetic panels (7,300 rows × 22 cols) |
+| `baseline_results.csv` | `reports/` | Raw walk-forward predictions (11,440 rows) |
+| `model_comparison.md` | `reports/` | Formatted baseline comparison table |
 
 ---
 
