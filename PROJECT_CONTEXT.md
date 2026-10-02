@@ -291,11 +291,14 @@ XGBoost/LightGBM regression using all engineered features with the same walk-for
 | `validate_synthetic.py` | `src/` | Week 4: KS-test validation report |
 | `walk_forward.py` | `src/` | Week 5: Walk-forward validation engine |
 | `models/baselines.py` | `src/models/` | Week 5: 4 baseline forecasters |
+| `models/arima_model.py` | `src/models/` | Week 6: ARIMA forecaster with auto-order selection |
+| `run_arima_eval.py` | `src/` | Week 6: Combined baselines + ARIMA evaluation |
 | `daily_panel_u001.csv` | `data/processed/` | Real daily panel (510 rows × 17 cols) |
 | `fitted_params.json` | `data/processed/` | Fitted distribution parameters |
 | `synthetic_panels.csv` | `data/processed/` | Synthetic panels (7,300 rows × 22 cols) |
 | `baseline_results.csv` | `reports/` | Raw walk-forward predictions (11,440 rows) |
-| `model_comparison.md` | `reports/` | Formatted baseline comparison table |
+| `arima_results.csv` | `reports/` | Raw predictions incl. ARIMA (14,300 rows) |
+| `model_comparison.md` | `reports/` | Formatted model comparison table |
 
 ---
 

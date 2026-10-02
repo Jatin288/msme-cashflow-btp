@@ -22,8 +22,10 @@ src/
   generate_synthetic_data.py → Simulates 20 MSME businesses with full cash flow
   validate_synthetic.py      → KS-test validation (synthetic vs real)
   walk_forward.py            → Walk-forward validation engine
+  run_arima_eval.py          → Combined baselines + ARIMA evaluation
   models/
     baselines.py             → Baseline forecasters (Last Value, Moving Avg, Linear Trend)
+    arima_model.py           → ARIMA forecaster with auto-order selection
 data/raw/                    → Raw datasets (gitignored)
 data/processed/              → Cleaned panels, fitted params, synthetic data
 notebooks/                   → Exploratory analysis
