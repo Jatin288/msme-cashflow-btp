@@ -39,7 +39,8 @@ reports/                     → Literature notes, data findings, model comparis
 | 3 | Daily cash-flow panel + feature engineering | ✅ |
 | 4 | Synthetic data generation + KS validation | ✅ |
 | 5 | Walk-forward validation + baseline models | ✅ |
-| 6 | ARIMA / Auto-ARIMA | 🔜 |
+| 6 | ARIMA / Auto-ARIMA | ✅ |
+| 7 | XGBoost / LightGBM | 🔜 |
 
 ## Running the Pipeline
 

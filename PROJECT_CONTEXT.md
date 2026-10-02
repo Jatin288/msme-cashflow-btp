@@ -256,9 +256,19 @@ Based on published literature:
 - Key findings: 7-Day Avg and Last Value closely competitive (MAE ~₹3.5M at t+7); Linear Trend worst; all baselines sMAPE 37–74%
 - Framework designed for plug-in models — ARIMA/XGBoost will use the same evaluation engine
 
-### NEXT — Week 6+
+### DONE — Week 6
 
-ARIMA / Auto-ARIMA, then XGBoost/LightGBM with the same walk-forward framework
+- Built `src/models/arima_model.py` — ARIMA forecaster with auto-order selection (pmdarima)
+- Built `src/run_arima_eval.py` — combined baselines + ARIMA walk-forward evaluation
+- Auto-ARIMA selected order (0,1,0) for 17/20 businesses = random walk model
+- 0% fit failure rate across 2,860 ARIMA fits
+- **Key finding: ARIMA does NOT beat baselines** — lags behind by 2.7–6.3% vs best baseline at every horizon
+- Root cause: ARIMA is univariate (uses only cash_balance history), cannot leverage the 22 engineered features
+- This validates the need for multivariate ML models (XGBoost) in Week 7
+
+### NEXT — Week 7+
+
+XGBoost/LightGBM regression using all engineered features with the same walk-forward framework
 
 ---
 
