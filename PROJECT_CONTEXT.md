@@ -75,36 +75,40 @@ For when Prof. Vajpayee asks about technical depth:
 
 ---
 
-## 7. Two-Semester Technical Roadmap
+## 7. Two-Semester Technical Roadmap (Updated Oct 2026)
 
-### Semester 1 (Aug 15 – Dec 15, 2026): The Forecasting Core
+### Strategic Architecture: "Predictive Platform" (Sem 1) ➔ "Prescriptive Execution" (Sem 2)
+The project avoids artificial elongation by establishing a clean separation between prediction and action:
+- **Semester 1 (Weeks 1–18):** Complete Predictive Foundation + Early Warning Engine + Empirical Studies (RQ1/RQ2) + **Working Web Application**.
+  *Rationale:* Evaluators grade what is *visible*. An interactive web application (CSV upload, cash runway graphs, risk alert badges, SHAP root-cause breakdown) makes the engineering and research undeniable.
+- **Semester 2 (Weeks 19–36):** Open-Ended Prescriptive Action Layer. Natural progression: from predicting a cash crunch to mathematically recommending *how to prevent it* (Counterfactual What-If Simulation, TReDS invoice discounting optimizer, or Financial Copilot). To be finalized with Prof. Vajpayee following the Sem 1 live demo.
+
+### Semester 1 (Aug 15 – Dec 15, 2026): The Predictive Early Warning Platform
 
 | Phase | Weeks | Work | Status |
 |---|---|---|---|
 | Literature + problem formulation | 1–2 | 8 papers read, synthesis, problem formulation doc written | DONE |
-| Data pipeline | 3–5 | Daily cash-flow panel from raw invoices, feature engineering | DONE |
-| Synthetic data + KS validation | 6–8 | Calibrated generator, two-part model, validation | DONE (early) |
+| Data pipeline | 3–4 | Daily cash-flow panel from raw invoices, feature engineering | DONE |
+| Synthetic data + KS validation | 4–5 | Calibrated generator, two-part payment model, KS tests | DONE |
 | Walk-forward validation + baselines | 5 | 4 baselines, expanding-window eval, MAE/RMSE/sMAPE | DONE |
-| **Forecasting models (ARIMA to XGBoost)** | **6–8** | **ARIMA, XGBoost/LightGBM, stress classification** | **NEXT** |
-| Integration, evaluation, report | 13–16 | End-to-end demo (CSV upload), MAE/RMSE results | Pending |
-| Buffer + submission | 17–18 | Exam period, final commit | Pending |
+| **ARIMA evaluation (0,1,0 random walk)** | **6** | **2,860 ARIMA fits across 20 businesses; proves univariate limits** | **DONE** |
+| Multivariate ML Models (LightGBM/XGBoost) | 7–9 | Train gradient boosting on 22 rolling features; multi-horizon forecast | NEXT |
+| Stress Classifier & Empirical Studies (RQ1/RQ2) | 10–11 | Define liquidity threshold, train classifier, lead-time curve (RQ1), scarcity curve (RQ2) | Pending |
+| Explainability (TreeSHAP) | 12 | Decompose risk scores into human-readable driver cards | Pending |
+| Working Web Application (FastAPI + Dashboard) | 13–15 | Interactive UI: CSV upload, cash runway chart, risk alert banner, SHAP cards | Pending |
+| Integration, Demo Polish & Defense Prep | 16–18 | End-to-end testing, BTP-1 interim report, live defense demo rehearsal | Pending |
 
-**Semester 1 deliverable:** A working forecasting pipeline that predicts cash balance 7/14/30/60 days ahead, backtested on real + synthetic data, with a clear "which model forecasts best and why" answer.
+**Semester 1 deliverable:** A working, visible Web Application + Comprehensive Interim Thesis Report with full benchmark metrics (Baselines vs ARIMA vs LightGBM) and RQ1/RQ2 empirical curves.
 
-CORE (must finish): Forecasting pipeline + evaluation.  
-STRETCH (if time allows): LSTM temporal model comparison.
+### Semester 2 (Jan – May 2027): Prescriptive Actions & System Optimization (Open-Ended)
 
-### Semester 2 (Jan – May 2027): Risk, Early Warning, Explainability
+| Candidate Direction | Focus | Description |
+|---|---|---|
+| **Option A: Prescriptive Decision Engine** | Operations Research | Counterfactual Monte Carlo simulation ("What if customer X pays 5 days early?"), action optimization for insolvency prevention. |
+| **Option B: Fintech & TReDS Financing** | Credit Underwriting | Dynamic cash-flow credit scoring, automated invoice discounting matching for working-capital shortfall. |
+| **Option C: Agentic Financial Copilot** | GenAI / Agents | Plain-language conversational advisory agent integrated with tool-calling on the cash-flow engine. |
 
-| Phase | Month | Work | Status |
-|---|---|---|---|
-| Risk classification | 5 | Define stress label precisely; logistic regression + XGBoost classifier | Pending |
-| **RQ1: Early-detection-horizon study** | 6 | Detection lead-time curve — main research contribution | Pending |
-| **RQ2: Data-scarcity robustness** + SHAP | 7 | Robustness curve by history length; SHAP explanation layer | Pending |
-| Decision support + demo + final report | 8 | Monte Carlo intervention simulation; integrate all; write thesis | Pending |
-
-Semester 2 CORE: RQ1 + RQ2 + SHAP. These are what academically justify two semesters.  
-STRETCH: Monte Carlo decision-support simulation, real-world MSME validation.
+*Strategy:* Retain flexibility to select the exact Semester 2 direction with Prof. Vajpayee after the live Semester 1 demo.
 
 ---
 
@@ -315,12 +319,17 @@ XGBoost/LightGBM regression using all engineered features with the same walk-for
 
 - **Week 1 email:** Sent with `BTP_Problem_Formulation.pdf` attached. Led with literature positioning and the two research questions.
 - **Week 2 email:** No attachment. Led with three specific numbers (38.7% early, 22.2% on-time, 39.1% late). Hook: asked if he has domain intuition on customer payment patterns in MSME credit.
+- **Weeks 3–5 updates:** Shared data pipeline, synthetic generator calibration (KS-test verified), and baseline walk-forward results.
+- **Week 6 email:** Shared ARIMA evaluation across 20 businesses (2,860 fits). Auto-ARIMA converged to (0,1,0) random walk with zero drift, failing to beat simple moving averages. Proves univariate limits and justifies multivariate ML.
+- **Week 6 Hook Question (Offline Meeting Bridge):**
+  *"Our ARIMA benchmark confirmed that cash balance cannot be forecasted from historical balances alone (it degenerated into a random walk with zero drift, mirroring the naive baseline). Given this, how should we formulate the ground-truth liquidity stress threshold for our multivariate models: as an expense-coverage multiple (e.g. 30 days of fixed expenses) or as a statistical drawdown from the business's historical operating buffer?"*
 
-### For future emails
-
-- GitHub link: save for Week 3–4, once there is actual pipeline code in `src/` someone can read.
-- Weekly plan file: do NOT attach — it has scaffolding notes written for internal use.
-- Literature notes file: hold back unless he specifically asks; the problem formulation PDF is the distilled reader-facing version.
+### Offline Meeting Strategy with Prof. Vajpayee
+- **Core Message:** "Semester 1 culminates in an early warning ML model AND a live, visible web application by December. Semester 2 stays open-ended for prescriptive decision intelligence."
+- **60-Second Verbal Elevator Pitch:**
+  *"Sir, in the first 6 weeks, I finished the data pipeline, built a realistic simulation calibrated on real invoice patterns, and tested our baseline models and ARIMA across 20 businesses.*
+  *For the rest of this semester, my goal is to deliver a complete, working system by December. I will train modern gradient boosting models, build a liquidity stress classifier, answer our two core research questions on early-warning lead time and data scarcity, and wrap it all inside a working web dashboard where someone can upload transactions and see the forecast and risk warnings live.*
+  *This way, Semester 1 ends with a working software prototype and a solid research foundation. For Semester 2, we can sit down after the demo and decide whether to extend it towards decision optimization, invoice financing recommendations, or financial advisory."*
 
 ---
 
@@ -332,8 +341,10 @@ Udyox is an *operational recording* system — business types in data daily. Thi
 **"How is this different from the News-to-Stock BTP he already advised?"**  
 That project predicts *stock price direction* from *news sentiment* — public markets. This predicts *business cash shortfall* from *that business's own transaction history* — private, operational, entirely different domain.
 
-**"Is this really two semesters of work?"**  
-The forecasting pipeline alone is roughly one semester. What extends it is the two research studies: the early-detection-horizon curve (RQ1) and the robustness-under-scarcity curve (RQ2). Those are genuine experiments with citable findings, not extra features.
+**"Is this really two semesters of work, or is it too small?"**  
+It is structured into two distinct, high-impact halves to avoid artificial elongation:
+1. **Semester 1 (Predictive & Diagnostic Platform):** Delivers the complete forecasting benchmark, liquidity stress classifier, empirical studies (RQ1 lead time & RQ2 data scarcity), and a *live, visible web application* (FastAPI + interactive dashboard).
+2. **Semester 2 (Prescriptive & Decision Intelligence):** Moves from passive prediction to active decision optimization — counterfactual simulation ("what if we offer a 2% early-payment discount?"), invoice discounting matching (TReDS), or agentic advisory workflows.
 
 **"Where does the data come from? Does a business type it in live?"**  
 No live data entry. We train and validate entirely on historical records. A demo would accept a CSV file upload of historical transactions — the system outputs forecast, risk score, and explanation.
